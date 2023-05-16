@@ -14,7 +14,8 @@ logger.info("Чтение данных из файла с ПК ...")
 pc_soft = read_data(pc_path, "xlsx", "ПО из ИС")
 
 ## Обработка загруженных данных (ПО ПК)
-
+pc_soft.columns = ['name', 'version', 'developer', 'numb_dev', 'comment', 'ts', 'tel', 'update', 'update_rule', 'install']
+pc_soft = pc_soft.drop(['comment', 'ts', 'tel', 'update', 'update_rule'], axis = 1)
 pc_soft.numb_dev = pc_soft.numb_dev.transform(lambda x: -1 if x == 'Не поддерживается' else x)
 #Удаление чисел
 template = re.compile(r'(\d+)')
