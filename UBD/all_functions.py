@@ -10,15 +10,15 @@ from pathlib import Path
 import app_logger
 logger = app_logger.get_logger(__name__)
 
-def read_data(file_name, format, about):
+def read_data(file_name, format, about, **kwargs):
     read_com = {"csv": pd.read_csv, "xlsx": pd.read_excel}
     data_path = Path(file_name).absolute()
     try:
-        data = read_com[format](data_path)
+        data = read_com[format](data_path, **kwargs)
     except Exception as err:
-        print(err)
+        print(f"При считывании данных c {about} возникла ошибка {err}")
         file_name = input(f"Введите путь до файла с {about}: ")
-        data = read_data(file_name, format, about)
+        data = read_data(file_name, format, about, **kwargs)
     return data
 
 """
