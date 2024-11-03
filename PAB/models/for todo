@@ -1,0 +1,102 @@
+tick = QtGui.QImage('address-book--arrow.png')
+
+"""
+Создаем модель обработки данных для виджета-листа
+При создании объекта на основании класса этой модели в инит передается список, из двух позиций (статус, дело)
+Если список не передается, создается пустой список
+Чтобы передать данные для отображения в модель отображения данных (QListView) в модели используется метод data
+В него передается объект модели, индекс ?, роль.
+Роль передает в метод объект модели отображения.
+Индекс связан с месторасположением данных из объекта модели отображения, которое надо заполнить данными.
+Индекс - это объект класса модель индекса. У него есть два аттрибута .row (строка) и .column(столбец)
+"""
+class TodoModel(QtCore.QAbstractListModel):
+    def __init__(self, todos=None):
+        super().__init__()
+        self.todos = todos or []
+
+    def data(self, index, role):
+        if role == Qt.DisplayRole:
+            _, text = self.todos[index.row()]
+            return text
+
+        if role == Qt.DecorationRole:
+            status, _ = self.todos[index.row()]
+            if status:
+                return tick
+
+    def rowCount(self, index):
+        return len(self.todos)
+
+        def add(self):
+              text = self.todo_edit.text()
+              text = text.strip() # Remove whitespace from the ends of the
+              if text: # Don't add empty strings.# Access the list via the model.
+                  self.model_todo.todos.append((False, text))
+              # Trigger refresh.
+                  self.model_todo.layoutChanged.emit()
+              # Empty the input
+                  self.todo_edit.setText("")
+
+
+          def dele(self):
+              indexes = self.list.selectedIndexes()
+              if indexes:
+                  index = indexes[0]
+                  del self.model_todo.todos[index.row()]
+                  self.model_todo.layoutChanged.emit()
+                  self.list.clearSelection()
+
+          def comp(self):
+              indexes = self.list.selectedIndexes()
+              if indexes:
+                  index = indexes[0]
+                  row = index.row()
+                  status, text = self.model_todo.todos[row]
+                  self.model_todo.todos[row] = (True, text)
+                  self.model_todo.dataChanged.emit(index, index)
+                  self.list.clearSelection()
+
+                  self.todo_edit = QLineEdit()
+                  self.todo_edit.setPlaceholderText("Введите работу ...")
+
+                  self.add_btn = QPushButton("Добавить")
+                  self.add_btn.setCheckable(True)
+                  self.add_btn.clicked.connect(lambda: self.add())
+
+                  self.del_btn = QPushButton("Удалить")
+                  self.del_btn.setCheckable(True)
+                  self.del_btn.clicked.connect(lambda: self.dele())
+
+                  self.comp_btn = QPushButton("Удалить")
+                  self.comp_btn.setCheckable(True)
+                  self.comp_btn.clicked.connect(lambda: self.comp())
+
+                  def add(self):
+                      text = self.todo_edit.text()
+                      text = text.strip() # Remove whitespace from the ends of the
+                      if text: # Don't add empty strings.# Access the list via the model.
+                          self.model_todo.todos.append((False, text))
+                      # Trigger refresh.
+                          self.model_todo.layoutChanged.emit()
+                      # Empty the input
+                          self.todo_edit.setText("")
+
+
+                  def dele(self):
+                      indexes = self.list.selectedIndexes()
+                      if indexes:
+                          index = indexes[0]
+                          del self.model_todo.todos[index.row()]
+                          self.model_todo.layoutChanged.emit()
+                          self.list.clearSelection()
+
+                  def comp(self):
+                      indexes = self.list.selectedIndexes()
+                      if indexes:
+                          index = indexes[0]
+                          row = index.row()
+                          status, text = self.model_todo.todos[row]
+                          self.model_todo.todos[row] = (True, text)
+                          self.model_todo.dataChanged.emit(index, index)
+                          self.list.clearSelection()
